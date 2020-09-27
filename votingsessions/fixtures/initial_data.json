@@ -1,0 +1,20 @@
+[
+    {
+        "model": "votingsessions.votingsession",
+        "pk": 1,
+        "fields": {
+            "start_date": "2020-09-25",
+            "end_date": "2020-10-25",
+            "minimum_amount_per_token": 4000
+        }
+    },
+    {
+        "model": "votingsessions.votingsession",
+        "pk": 2,
+        "fields": {
+            "start_date": "2020-10-26",
+            "end_date": "2020-11-26",
+            "minimum_amount_per_token": 4000
+        }
+    }
+]

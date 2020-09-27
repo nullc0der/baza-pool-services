@@ -1,0 +1,17 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.pythonPath": "/home/prasanta/.cache/pypoetry/virtualenvs/bazapoolservices-f234oVwc-py3.8/bin/python",
+    "python.venvPath": "/home/prasanta/.cache/pypoetry/virtualenvs/bazapoolservices-f234oVwc-py3.8",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+}
