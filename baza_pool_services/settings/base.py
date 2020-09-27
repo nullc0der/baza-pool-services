@@ -145,7 +145,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/public/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+# IF some static file served through django uncomment
+# this line and add staticfiles dir
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 
 # Media files
 
