@@ -12,7 +12,7 @@ class TokenViewSet(ViewSet):
     API ViewSet for Token
     """
 
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated, IsAdminUser, )
 
     def list(self, request):
         tokens = TokenSerializer(

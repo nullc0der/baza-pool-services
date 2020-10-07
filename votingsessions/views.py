@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -10,7 +11,7 @@ from votingsessions.utils import get_current_session, get_next_session
 
 class VotingSessionViewSet(ViewSet):
     """
-    API ViewSet for VotingSession
+    API ViewSet for VotingSession admin
     """
 
     permission_classes = (IsAuthenticated, IsAdminUser, )
@@ -18,9 +19,11 @@ class VotingSessionViewSet(ViewSet):
     def list(self, request):
         current_session = VotingSessionSerializer(get_current_session()).data
         next_session = VotingSessionSerializer(get_next_session()).data
+        # TODO: Might need to add order_by
         past_sessions = VotingSessionSerializer(
             VotingSession.objects.all().exclude(
-                id__in=[current_session['id'], next_session['id']]), many=True).data
+                id__in=[current_session['id'], next_session['id']]),
+            many=True).data
         data = {
             'current_session': current_session,
             'next_session': next_session,
@@ -41,3 +44,13 @@ class VotingSessionViewSet(ViewSet):
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except VotingSession.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class VotingSessionView(APIView):
+    """
+    This view will be used to get current session in landing
+    """
+
+    def get(self, request, format=None):
+        current_session = VotingSessionSerializer(get_current_session()).data
+        return Response(current_session)

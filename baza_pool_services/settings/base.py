@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from django.core.exceptions import ImproperlyConfigured
 
+from celery.schedules import crontab
+
 
 def get_env_var(name):
     try:
@@ -60,7 +62,8 @@ THIRD_PARTY_APPS = [
 PROJECT_APPS = [
     'useraccount',
     'tokendb',
-    'votingsessions'
+    'votingsessions',
+    'votingpayment'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -173,7 +176,6 @@ EMAIL_HOST_USER = get_env_var('DJANGO_EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_env_var('DJANGO_EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
-
 # Rest Framework
 
 REST_FRAMEWORK = {
@@ -191,3 +193,24 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'access-token'
 )
+
+# CELERY
+
+CELERY_BROKER_URL = 'redis://' + get_env_var('REDIS_HOST') + ':6379/0'
+CELERY_RESULT_BACKEND = 'redis://' + get_env_var('REDIS_HOST') + ':6379/0'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULE = {
+    'check_pending_payments': {
+        'task': 'votingpayment.tasks.task_check_pending_payments',
+        'schedule': crontab()
+    }
+}
+
+# Baza Wallet API
+
+COIN_DAEMON_HOST = get_env_var('COIN_DAEMON_HOST')
+COIN_DAEMON_PORT = get_env_var('COIN_DAEMON_PORT')
+WALLET_FILENAME = get_env_var('WALLET_FILENAME')
+WALLET_PASSWORD = get_env_var('WALLET_PASSWORD')
+WALLET_API_URL = get_env_var('WALLET_API_URL')
+WALLET_API_KEY = get_env_var('WALLET_API_KEY')
