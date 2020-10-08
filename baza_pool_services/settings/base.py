@@ -202,7 +202,7 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'check_pending_payments': {
         'task': 'votingpayment.tasks.task_check_pending_payments',
-        'schedule': crontab()
+        'schedule': crontab()  # TODO: Change to 10 min
     }
 }
 
