@@ -13,9 +13,7 @@ def check_pending_payments() -> None:
             try:
                 votingpayment = VotingPayment.objects.get(
                     tx_hash=transaction['hash'])
-                votingpayment.amount = transaction['transfers']['amount']
-                votingpayment.tx_from_address = \
-                    transaction['transfers']['address']
+                votingpayment.amount = transaction['transfers'][0]['amount']
                 votingpayment.timestamp = datetime.fromtimestamp(
                     transaction['timestamp'])
                 votingpayment.save()

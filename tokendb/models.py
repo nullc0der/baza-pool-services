@@ -13,3 +13,5 @@ class Token(models.Model):
     algo = models.CharField(max_length=30)
     is_archived = models.BooleanField(default=False)
     has_won = models.BooleanField(default=False)
+    added_date = models.DateField(null=True, auto_now_add=True)
+    won_date = models.DateField(null=True)

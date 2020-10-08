@@ -15,4 +15,3 @@ class VotingPayment(models.Model):
     amount = models.FloatField(null=True)
     timestamp = models.DateTimeField(null=True)
     tx_hash = models.CharField(max_length=100)
-    tx_from_address = models.CharField(max_length=100)

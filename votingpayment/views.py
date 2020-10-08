@@ -8,6 +8,7 @@ from votingpayment.models import VotingPayment
 from votingsessions.models import VotingSession
 from votingsessions.utils import get_current_session
 from votingpayment.serializers import VotingPaymentSerializer
+from votingpayment.api_wrapper import ApiWrapper
 
 # Create your views here.
 
@@ -24,6 +25,19 @@ class VotingPaymentView(APIView):
             serializer.save(token=token, voting_session=get_current_session())
             return Response()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VotingPaymentAddress(APIView):
+    """
+    This API will be used to get address of payment wallet
+    """
+
+    def get(self, request, format=None):
+        apiwrapper = ApiWrapper()
+        res = apiwrapper.get_wallet_address()
+        if res.status_code == 200:
+            return Response({'wallet_address': res.json()['address']})
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VotingPaymentAdminView(APIView):

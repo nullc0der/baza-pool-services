@@ -47,6 +47,9 @@ class ApiWrapper(object):
     def save_wallet(self):
         return self.get_api_response('PUT', '/save')
 
+    def get_wallet_address(self):
+        return self.get_api_response('GET', '/addresses/primary')
+
     def get_wallet_transactions(self):
         if self.wallet_is_open:
             return self.get_api_response('GET', '/transactions')

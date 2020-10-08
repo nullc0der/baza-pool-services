@@ -39,7 +39,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # CORS
 
 CORS_ORIGIN_WHITELIST = [
-    'https://{}'.format(ADMIN_HOST_URL)
+    'https://{}'.format(ADMIN_HOST_URL),
+    'https://{}'.format(LANDING_HOST_URL)
 ]
 
 LOGGING = {

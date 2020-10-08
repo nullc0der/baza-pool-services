@@ -46,7 +46,7 @@ class VotingSessionViewSet(ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-class VotingSessionView(APIView):
+class CurrentVotingSessionView(APIView):
     """
     This view will be used to get current session in landing
     """
