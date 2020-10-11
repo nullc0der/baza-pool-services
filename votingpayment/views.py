@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,9 +23,16 @@ class VotingPaymentView(APIView):
     def post(self, request, format=None):
         serializer = VotingPaymentSerializer(data=request.data)
         if serializer.is_valid():
-            token = Token.objects.get(id=serializer.validated_data['token_id'])
-            serializer.save(token=token, voting_session=get_current_session())
-            return Response()
+            voting_session = get_current_session()
+            if not voting_session.is_paused:
+                token = Token.objects.get(
+                    id=serializer.validated_data['token_id'])
+                serializer.save(token=token, voting_session=voting_session)
+                return Response()
+            return Response(
+                {'non_field_errors': ['Voting session is paused']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -33,10 +42,11 @@ class VotingPaymentAddress(APIView):
     """
 
     def get(self, request, format=None):
-        apiwrapper = ApiWrapper()
-        res = apiwrapper.get_wallet_address()
-        if res.status_code == 200:
-            return Response({'wallet_address': res.json()['address']})
+        if settings.SITE_TYPE != 'local':
+            apiwrapper = ApiWrapper()
+            res = apiwrapper.get_wallet_address()
+            if res.status_code == 200:
+                return Response({'wallet_address': res.json()['address']})
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
