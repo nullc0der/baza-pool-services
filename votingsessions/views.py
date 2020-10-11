@@ -89,5 +89,5 @@ class CurrentVotingSessionView(APIView):
         current_session['tokens'] = [
             token for token in current_session['tokens']
             if str(token['id']) not in current_session['hidden_tokens_id']]
-        current_session['hidden_tokens_id'] = []
+        del current_session['hidden_tokens_id']
         return Response(current_session)
