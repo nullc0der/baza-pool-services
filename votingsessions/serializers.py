@@ -10,6 +10,10 @@ from votingsessions.models import VotingSession
 
 class VotingSessionSerializer(serializers.ModelSerializer):
     tokens = TokenSerializer(read_only=True, many=True)
+    hidden_tokens_id = serializers.SerializerMethodField()
+
+    def get_hidden_tokens_id(self, obj):
+        return obj.get_hidden_tokens_id()
 
     def validate(self, values):
         if self.instance:

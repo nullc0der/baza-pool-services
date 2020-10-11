@@ -12,3 +12,8 @@ class VotingSession(models.Model):
     description = models.TextField()
     is_paused = models.BooleanField(default=False)
     tokens = models.ManyToManyField(Token)
+    # If multiple, must be seperated by comma(,)
+    hidden_tokens_id = models.TextField(default='', max_length=400)
+
+    def get_hidden_tokens_id(self):
+        return self.hidden_tokens_id.split(',')

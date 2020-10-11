@@ -1,3 +1,4 @@
+from tokendb.models import Token
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
@@ -46,6 +47,38 @@ class VotingSessionViewSet(ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+class ToggleTokenVisibilityInSession(APIView):
+    """
+    This view will be used to toggle a tokens visibility in
+    a session
+    """
+
+    permission_classes = (IsAuthenticated, IsAdminUser, )
+
+    def post(self, request, session_id, token_id):
+        try:
+            visible = False
+            session = VotingSession.objects.get(id=session_id)
+            token = Token.objects.get(id=token_id)
+            hidden_tokens_id = session.get_hidden_tokens_id()
+            if str(token.id) in hidden_tokens_id:
+                hidden_tokens_id.remove(str(token.id))
+                visible = True
+            else:
+                hidden_tokens_id.append(str(token.id))
+            session.hidden_tokens_id = ','.join(hidden_tokens_id)
+            session.save()
+            return Response(
+                {
+                    'visible': visible,
+                    'token_id': token.id,
+                    'session_id': session.id
+                }
+            )
+        except (VotingSession.DoesNotExist, Token.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 class CurrentVotingSessionView(APIView):
     """
     This view will be used to get current session in landing
@@ -53,4 +86,8 @@ class CurrentVotingSessionView(APIView):
 
     def get(self, request, format=None):
         current_session = VotingSessionSerializer(get_current_session()).data
+        current_session['tokens'] = [
+            token for token in current_session['tokens']
+            if str(token['id']) not in current_session['hidden_tokens_id']]
+        current_session['hidden_tokens_id'] = []
         return Response(current_session)
