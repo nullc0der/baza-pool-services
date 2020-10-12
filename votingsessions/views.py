@@ -20,10 +20,10 @@ class VotingSessionViewSet(ViewSet):
     def list(self, request):
         current_session = VotingSessionSerializer(get_current_session()).data
         next_session = VotingSessionSerializer(get_next_session()).data
-        # TODO: Might need to add order_by
         past_sessions = VotingSessionSerializer(
             VotingSession.objects.all().exclude(
-                id__in=[current_session['id'], next_session['id']]),
+                id__in=[current_session['id'],
+                        next_session['id']]).order_by('-id'),
             many=True).data
         data = {
             'current_session': current_session,

@@ -69,7 +69,8 @@ class VotingPaymentAdminView(APIView):
                 many=True).data
             data = {
                 'voting_payments': voting_payments,
-                'total': sum(payment['amount'] for payment in voting_payments)
+                'total_amount_raised': (
+                    sum(payment['amount'] for payment in voting_payments))
             }
             return Response(data)
         except (VotingSession.DoesNotExist, Token.DoesNotExist):

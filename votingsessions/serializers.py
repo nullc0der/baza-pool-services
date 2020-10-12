@@ -2,15 +2,39 @@ from django.utils.timezone import now
 
 from rest_framework import serializers
 
-from tokendb.serializers import TokenSerializer
+from tokendb.models import Token
+
+from votingpayment.models import VotingPayment
 
 from votingsessions.utils import get_current_session, get_next_session
 from votingsessions.models import VotingSession
 
 
+class SessionTokenSerializer(serializers.ModelSerializer):
+    total_votes = serializers.SerializerMethodField()
+
+    def get_total_votes(self, obj):
+        return VotingPayment.objects.filter(
+            token=obj, voting_session=self.context['voting_session']).exclude(
+            amount__isnull=True, timestamp__isnull=True).count()
+
+    class Meta:
+        model = Token
+        fields = (
+            'id', 'name', 'symbol', 'logo', 'homepage_url',
+            'algo', 'is_archived', 'has_won', 'added_date', 'won_date',
+            'total_votes'
+        )
+
+
 class VotingSessionSerializer(serializers.ModelSerializer):
-    tokens = TokenSerializer(read_only=True, many=True)
+    tokens = serializers.SerializerMethodField()
     hidden_tokens_id = serializers.SerializerMethodField()
+
+    def get_tokens(self, obj):
+        return SessionTokenSerializer(
+            obj.tokens.all().order_by('-id'),
+            many=True, context={'voting_session': obj}).data
 
     def get_hidden_tokens_id(self, obj):
         return obj.get_hidden_tokens_id()
