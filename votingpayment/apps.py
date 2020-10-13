@@ -6,6 +6,8 @@ class VotingpaymentConfig(AppConfig):
     name = 'votingpayment'
 
     def ready(self):
+        from django.core.cache import cache
+        cache.set('token_prices', {}, None)
         if settings.SITE_TYPE != 'local':
             from votingpayment.api_wrapper import ApiWrapper
             apiwrapper = ApiWrapper()

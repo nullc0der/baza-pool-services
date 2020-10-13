@@ -63,7 +63,8 @@ PROJECT_APPS = [
     'useraccount',
     'tokendb',
     'votingsessions',
-    'votingpayment'
+    'votingpayment',
+    'poolstats'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -156,6 +157,15 @@ STATIC_URL = '/public/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# DJANGO Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://{}:6379'.format(get_env_var('REDIS_HOST')),
+    },
+}
 
 # Site type
 
