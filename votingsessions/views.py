@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from tokendb.models import Token
 from rest_framework import status
 from rest_framework.views import APIView
@@ -25,6 +27,9 @@ class VotingSessionViewSet(ViewSet):
                 id__in=[current_session['id'],
                         next_session['id']]).order_by('-id'),
             many=True).data
+        current_session['tokens'] = sorted(
+            current_session['tokens'], key=itemgetter('amount_raised'),
+            reverse=True)
         data = {
             'current_session': current_session,
             'next_session': next_session,
@@ -89,5 +94,8 @@ class CurrentVotingSessionView(APIView):
         current_session['tokens'] = [
             token for token in current_session['tokens']
             if str(token['id']) not in current_session['hidden_tokens_id']]
+        current_session['tokens'] = sorted(
+            current_session['tokens'], key=itemgetter('amount_raised'),
+            reverse=True)
         del current_session['hidden_tokens_id']
         return Response(current_session)

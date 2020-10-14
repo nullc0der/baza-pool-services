@@ -12,6 +12,13 @@ from votingsessions.models import VotingSession
 
 class SessionTokenSerializer(serializers.ModelSerializer):
     total_votes = serializers.SerializerMethodField()
+    amount_raised = serializers.SerializerMethodField()
+
+    def get_amount_raised(self, obj):
+        voting_payments = VotingPayment.objects.filter(
+            token=obj, voting_session=self.context['voting_session']).exclude(
+            amount__isnull=True, timestamp__isnull=True)
+        return sum(payment.amount for payment in voting_payments)
 
     def get_total_votes(self, obj):
         return VotingPayment.objects.filter(
@@ -23,7 +30,7 @@ class SessionTokenSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name', 'symbol', 'logo', 'homepage_url',
             'algo', 'is_archived', 'has_won', 'added_date', 'won_date',
-            'total_votes'
+            'total_votes', 'amount_raised'
         )
 
 
