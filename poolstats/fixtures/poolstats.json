@@ -9,5 +9,27 @@
             "pool_url": "https://pool.baza.foundation/",
             "pool_stats_api_url": "https://pool.baza.foundation/api/v2/stats"
         }
+    },
+    {
+        "model": "poolstats.poolinfo",
+        "pk": 2,
+        "fields": {
+            "name": "Monero",
+            "symbol": "XMR",
+            "logo_url": "https://api.baza.services/media/tokenlogos/monero_logo.png",
+            "pool_url": "https://moneropool.baza.services/",
+            "pool_stats_api_url": "https://moneropool.baza.services/api/v1/stats"
+        }
+    },
+    {
+        "model": "poolstats.poolinfo",
+        "pk": 3,
+        "fields": {
+            "name": "AEON",
+            "symbol": "AEON",
+            "logo_url": "https://api.baza.services/media/tokenlogos/aeon.png",
+            "pool_url": "https://aeonpool.baza.services/",
+            "pool_stats_api_url": "https://aeonpool.baza.services/api/v1/stats"
+        }
     }
 ]

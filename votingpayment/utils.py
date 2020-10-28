@@ -25,7 +25,7 @@ def get_token_price(token_symbol: str) -> float:
             token_price['last_fetched'] = now()
             token_prices[token_symbol] = token_price
             cache.set('token_prices', token_prices, None)
-    return token_price['data']['Last']
+    return token_price['data']['Last'] if token_price['data'] else ''
 
 
 def check_pending_payments() -> None:
