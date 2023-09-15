@@ -28,6 +28,8 @@ for voting sessions.
     dotenv run poetry run python manage.py migrate
 ```
 
+- Run server
+
 ```bash
     dotenv run poetry run python manage.py runserver
 ```
